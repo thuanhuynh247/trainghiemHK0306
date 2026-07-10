@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hẹn Nhau Ngày Về · Quốc Học 2003–2006</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brick:#8f1d1d;--brick-bright:#b52a2a;--green:#183f30;--green-soft:#2c5a45;--lawn:#2f7d4e;
+    --brass:#b98a3c;--blue:#2f6db0;--paper:#f4ecd8;--paper-2:#efe4c9;
+    --ink:#241610;--ink-soft:#5b473a;--line:rgba(36,22,16,.14);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Be Vietnam Pro',system-ui,sans-serif;color:var(--ink);
+    background:radial-gradient(120% 60% at 50% -10%,rgba(143,29,29,.10),transparent 60%),var(--paper);
+    min-height:100dvh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:560px;margin:0 auto;padding:20px 18px calc(28px + env(safe-area-inset-bottom))}
+  .display{font-family:'Playfair Display',serif}
+  .center{text-align:center}
+
+  .head{text-align:center;margin-bottom:14px}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--brick)}
+  .eyebrow::before,.eyebrow::after{content:"·";margin:0 7px;color:var(--brass)}
+  .head h1{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(28px,8vw,40px);line-height:1;color:var(--green);margin:8px 0 0}
+  .head h1 em{font-style:italic;color:var(--brick);font-weight:700}
+  .date-chip{display:inline-block;margin-top:10px;padding:5px 14px;border-radius:999px;background:var(--green);color:var(--paper);font-weight:600;font-size:12px}
+
+  /* TABS */
+  .tabbar{display:flex;gap:6px;background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:5px;margin:14px 0 18px}
+  .tab{flex:1;border:0;background:transparent;font-family:inherit;font-size:13.5px;font-weight:600;color:var(--ink-soft);
+    padding:10px 6px;border-radius:10px;cursor:pointer;transition:.15s;white-space:nowrap}
+  .tab.active{background:var(--brick);color:var(--paper);box-shadow:0 6px 16px -8px rgba(143,29,29,.7)}
+
+  .view{display:none}
+  .view.on{display:block;animation:fade .25s}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}}
+
+  /* EMOTION INPUT */
+  .q{font-family:'Playfair Display',serif;font-size:clamp(24px,7vw,32px);font-weight:700;color:var(--green);text-align:center;line-height:1.15;margin:6px 0 4px}
+  .q-sub{text-align:center;color:var(--ink-soft);font-size:14px;margin:0 0 22px}
+  .moods{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+  .mood{display:flex;align-items:center;gap:11px;padding:15px 14px;border:1.5px solid var(--line);border-radius:14px;
+    background:linear-gradient(180deg,#fffdf6,var(--paper-2));font-family:inherit;font-size:16px;font-weight:600;color:var(--ink);
+    cursor:pointer;transition:transform .08s,border-color .15s;text-align:left}
+  .mood:active{transform:scale(.97)}
+  .mood .em{font-size:24px;line-height:1}
+  .mood.busy{opacity:.55;pointer-events:none}
+  .mood.done{border-color:var(--green);background:rgba(24,63,48,.1)}
+
+  .other{margin-top:11px;display:flex;gap:9px}
+  .other input{flex:1;font-family:inherit;font-size:16px;padding:14px;border:1.5px solid var(--line);border-radius:13px;background:#fffdf7;outline:none}
+  .other input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(24,63,48,.14)}
+  .other button{border:0;border-radius:13px;padding:0 20px;font-family:inherit;font-weight:700;font-size:15px;color:var(--paper);background:var(--green);cursor:pointer}
+
+  .my-emo{margin-top:20px;padding:15px 16px;border-radius:14px;background:rgba(184,42,42,.08);border:1px dashed rgba(143,29,29,.4);text-align:center;display:none}
+  .my-emo b{color:var(--brick);font-size:19px;font-family:'Playfair Display',serif}
+  .my-emo .re{margin-top:8px;background:transparent;border:1.5px solid var(--line);color:var(--green);font-family:inherit;font-weight:600;font-size:13px;padding:8px 16px;border-radius:999px;cursor:pointer}
+
+  /* CLOUD */
+  .cloud-head{text-align:center;margin-bottom:6px}
+  .cloud-head .big{font-family:'Playfair Display',serif;font-weight:900;font-size:44px;color:var(--brick);line-height:1}
+  .cloud-head .lbl{font-size:13px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase}
+  .cloud{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 16px;
+    padding:26px 12px;min-height:280px;border:1px solid var(--line);border-radius:18px;
+    background:linear-gradient(180deg,#fffdf6,var(--paper-2));margin-top:14px}
+  .cloud span{font-family:'Playfair Display',serif;font-weight:700;line-height:1.05;display:inline-block;animation:pop .4s ease-out}
+  @keyframes pop{from{opacity:0;transform:scale(.6)}}
+  .cloud .ph{font-family:'Be Vietnam Pro';font-weight:500;font-size:15px;color:var(--ink-soft)}
+  .cloud-note{text-align:center;color:var(--ink-soft);font-size:12px;margin-top:12px}
+
+  /* map + timeline (giữ nguyên) */
+  .live-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+  .clock{font-family:'Playfair Display',serif;font-weight:700;font-size:28px;color:var(--green)}
+  .clock small{font-family:'Be Vietnam Pro';font-size:11px;font-weight:600;color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:-2px}
+  .counter{text-align:right}
+  .counter .num{font-family:'Playfair Display',serif;font-weight:900;font-size:30px;color:var(--brick);line-height:1}
+  .counter .lbl{font-size:11px;color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase}
+  .now-banner{margin:14px 0 4px;padding:15px 17px;border-radius:16px;background:linear-gradient(180deg,#fffdf6,var(--paper-2));border:1px solid rgba(143,29,29,.25);box-shadow:0 12px 30px -20px rgba(143,29,29,.6)}
+  .nb-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brick)}
+  .nb-badge i{width:8px;height:8px;border-radius:50%;background:var(--brick);animation:blink 1.2s infinite}
+  .nb-badge.soft{color:var(--ink-soft)}.nb-badge.soft i{background:var(--brass);animation:none}
+  @keyframes blink{50%{opacity:.25}}
+  .nb-name{font-family:'Playfair Display',serif;font-size:25px;font-weight:700;color:var(--green);line-height:1.05;margin:7px 0 4px}
+  .nb-meta{font-size:14px;color:var(--ink-soft)}.nb-meta .loc{color:var(--brick);font-weight:600}
+  .mapwrap{margin:16px -4px 4px;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#fbf6e9}
+  #map{display:block;width:100%;height:auto}
+  .b{fill:var(--brick)}.g{fill:var(--lawn)}.inst{fill:var(--blue)}.park{fill:#cdc7ba}.strip{fill:#bcd6b6}
+  .mlbl{fill:#fff;font-family:'Be Vietnam Pro',sans-serif;font-weight:700;text-anchor:middle;dominant-baseline:central}
+  .mlbl.dark{fill:var(--ink)}
+  .edge{fill:none;stroke:var(--ink);stroke-width:4}
+  .street{fill:var(--ink-soft);font-family:'Be Vietnam Pro';font-weight:700;letter-spacing:.12em;text-anchor:middle}
+  .zone{fill:rgba(185,138,60,.16);stroke:var(--brass);stroke-width:0;opacity:0;transition:opacity .5s}
+  .zone.visited{opacity:.4;fill:rgba(185,138,60,.14)}
+  .zone.active{opacity:1;stroke-width:4;fill:rgba(143,29,29,.14);stroke:var(--brick);filter:drop-shadow(0 0 10px rgba(143,29,29,.5))}
+  #pin{transition:transform .8s cubic-bezier(.5,1.4,.5,1)}
+  .pin-bounce{animation:bounce 1.4s ease-in-out infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  .tl{position:relative;margin-top:22px;padding-left:44px}
+  .tl::before{content:"";position:absolute;left:17px;top:8px;bottom:8px;width:2px;background:var(--line)}
+  .tl-progress{position:absolute;left:17px;top:8px;width:2px;background:var(--brass);box-shadow:0 0 8px rgba(185,138,60,.6);transition:height 1s linear}
+  .seg{position:relative;padding:2px 0 20px}.seg:last-child{padding-bottom:4px}
+  .dot{position:absolute;left:-34px;top:2px;width:15px;height:15px;border-radius:50%;background:var(--paper);border:2.5px solid var(--line);z-index:2;transition:.3s}
+  .seg .time{font-size:13px;font-weight:600;color:var(--ink-soft)}
+  .seg .name{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--ink-soft);margin-top:1px;transition:.3s}
+  .seg .seg-count{font-size:12px;color:var(--brass);font-weight:600;margin-top:4px}
+  .seg.past .name{opacity:.5}.seg.past .dot{background:var(--brass);border-color:var(--brass)}
+  .seg.upcoming .name{opacity:.85}
+  .seg.now .dot{left:-36px;top:0;width:22px;height:22px;background:var(--brick);border-color:var(--brick);box-shadow:0 0 0 6px rgba(143,29,29,.18)}
+  .seg.now .name{font-size:21px;font-weight:700;color:var(--green);opacity:1}.seg.now .time{color:var(--brick)}
+  .tl-head{font-family:'Playfair Display',serif;font-size:15px;color:var(--green);margin:22px 0 2px}
+  .recent{margin-top:24px}
+  .recent h3{font-family:'Playfair Display',serif;font-size:16px;color:var(--green);margin:0 0 10px}
+  .recent .row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .recent .row:last-child{border-bottom:0}
+  .recent .row .em{font-size:20px}
+  .recent .row .t{margin-left:auto;color:var(--brass);font-weight:600;font-size:13px}
+
+  .foot{margin-top:26px;text-align:center;color:var(--ink-soft);font-size:12px;line-height:1.6}
+  .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:12px 18px;border-radius:999px;font-size:14px;z-index:60;display:none;max-width:90vw;text-align:center;box-shadow:0 10px 30px -10px rgba(0,0,0,.6)}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="eyebrow">Quốc Học Huế · Khóa 2003–2006</div>
+    <h1>Hẹn Nhau <em>Ngày Về</em></h1>
+    <div class="date-chip">Chủ nhật · 18/07/2026</div>
+  </div>
+
+  <nav class="tabbar">
+    <button class="tab active" id="tab-emotion" onclick="showTab('emotion')">Cảm xúc</button>
+    <button class="tab" id="tab-cloud" onclick="showTab('cloud')">Đám mây</button>
+    <button class="tab" id="tab-map" onclick="showTab('map')">Bản đồ</button>
+  </nav>
+
+  <!-- LỚP 1: CẢM XÚC -->
+  <section class="view on" id="view-emotion">
+    <div class="q">Cảm xúc của bạn<br>lúc này thế nào?</div>
+    <p class="q-sub">Chạm một ô — không cần gõ gì cả</p>
+    <div class="moods" id="moods"></div>
+    <div class="other">
+      <input id="otherInput" maxlength="24" placeholder="Cảm xúc khác…" aria-label="Cảm xúc khác">
+      <button id="otherBtn">Gửi</button>
+    </div>
+    <div class="my-emo" id="myEmo">
+      Bạn đang thấy <b id="myEmoWord"></b>
+      <div><button class="re" id="reBtn">Đổi cảm xúc</button></div>
+    </div>
+  </section>
+
+  <!-- LỚP 2: ĐÁM MÂY CẢM XÚC -->
+  <section class="view" id="view-cloud">
+    <div class="cloud-head"><div class="big" id="cloudTotal">–</div><div class="lbl">cảm xúc ngày về</div></div>
+    <div class="cloud" id="cloud"><span class="ph">Đang tải…</span></div>
+    <p class="cloud-note">Chữ càng lớn, càng nhiều người cùng cảm xúc ấy · Tự cập nhật</p>
+  </section>
+
+  <!-- LỚP 3: BẢN ĐỒ + TIMELINE -->
+  <section class="view" id="view-map">
+    <div class="live-head">
+      <div><span class="clock"><small>Bây giờ</small><span id="clock">--:--</span></span></div>
+      <div class="counter"><div class="num" id="total">–</div><div class="lbl">bạn đã về</div></div>
+    </div>
+    <div class="now-banner" id="nowBanner">
+      <div class="nb-badge" id="nbBadge"><i></i><span id="nbBadgeText">Đang diễn ra</span></div>
+      <div class="nb-name" id="nbName">—</div>
+      <div class="nb-meta"><span id="nbTime"></span> · <span class="loc">📍 <span id="nbLoc"></span></span><span id="nbCount"></span></div>
+    </div>
+    <div class="mapwrap">
+      <svg id="map" viewBox="0 0 1000 1110" role="img" aria-label="Sơ đồ sân trường Quốc Học">
+        <rect x="8" y="8" width="984" height="1050" rx="6" fill="#fbf6e9" class="edge"/>
+        <rect class="park" x="60" y="210" width="100" height="360" rx="4"/><text class="mlbl dark" x="110" y="390" font-size="20" transform="rotate(-90 110 390)">BÃI Ô TÔ</text>
+        <rect class="park" x="840" y="210" width="100" height="360" rx="4"/><text class="mlbl dark" x="890" y="390" font-size="20" transform="rotate(-90 890 390)">BÃI XE MÁY</text>
+        <rect class="b" x="375" y="74" width="250" height="70" rx="4"/><text class="mlbl" x="500" y="109" font-size="22">HỘI TRƯỜNG</text>
+        <rect class="b" x="375" y="150" width="250" height="52" rx="4"/><text class="mlbl" x="500" y="176" font-size="19">NHÀ CHƠI</text>
+        <rect class="b" x="186" y="216" width="82" height="384" rx="4"/><text class="mlbl" x="227" y="408" font-size="24" transform="rotate(-90 227 408)">DÃY B</text>
+        <rect class="b" x="732" y="216" width="82" height="384" rx="4"/><text class="mlbl" x="773" y="408" font-size="24" transform="rotate(-90 773 408)">DÃY A</text>
+        <rect class="strip" x="278" y="300" width="16" height="300" rx="4"/><rect class="strip" x="706" y="300" width="16" height="300" rx="4"/>
+        <rect class="g" x="320" y="250" width="96" height="150" rx="8"/><rect class="g" x="430" y="250" width="90" height="96" rx="8"/><rect class="g" x="536" y="250" width="96" height="150" rx="8"/>
+        <rect class="g" x="320" y="510" width="120" height="150" rx="8"/><rect class="g" x="560" y="510" width="120" height="150" rx="8"/>
+        <rect class="g" x="300" y="700" width="120" height="120" rx="8"/><rect class="g" x="560" y="700" width="120" height="120" rx="8"/><rect class="g" x="690" y="700" width="110" height="120" rx="8"/>
+        <rect class="g" x="120" y="874" width="166" height="70" rx="8"/>
+        <circle class="b" cx="478" cy="440" r="44"/><text class="mlbl" x="478" y="434" font-size="15">TƯỢNG</text><text class="mlbl" x="478" y="452" font-size="15">BÁC HỒ</text>
+        <g transform="rotate(-18 419 391)"><rect class="inst" x="384" y="374" width="70" height="34" rx="4"/><text class="mlbl" x="419" y="391" font-size="13">BACKDROP</text></g>
+        <rect class="inst" x="316" y="665" width="120" height="26" rx="4"/><text class="mlbl" x="376" y="678" font-size="13">PHOTOBOOTH</text>
+        <rect class="inst" x="527" y="808" width="16" height="62" rx="3"/><rect class="inst" x="420" y="876" width="130" height="14" rx="3"/><rect class="inst" x="410" y="876" width="14" height="62" rx="3"/>
+        <rect x="286" y="748" width="14" height="46" rx="2" fill="#7a6a55"/><text class="mlbl dark" x="360" y="770" font-size="14">XE ĐẠP</text>
+        <rect class="b" x="294" y="872" width="110" height="72" rx="4"/><text class="mlbl" x="349" y="902" font-size="14">PHÒNG</text><text class="mlbl" x="349" y="920" font-size="14">HIỆU TRƯỞNG</text>
+        <rect class="b" x="556" y="872" width="112" height="72" rx="4"/><text class="mlbl" x="612" y="902" font-size="14">GIÁM THỊ</text><text class="mlbl" x="612" y="920" font-size="14">GIÁO VỤ</text>
+        <rect class="b" x="340" y="978" width="58" height="42" rx="4"/><text class="mlbl" x="369" y="1000" font-size="12">KHÁCH</text>
+        <rect class="b" x="558" y="978" width="58" height="42" rx="4"/><text class="mlbl" x="587" y="1000" font-size="12">BẢO VỆ</text>
+        <line class="edge" x1="8" y1="1058" x2="410" y2="1058"/><line class="edge" x1="590" y1="1058" x2="992" y2="1058"/>
+        <text class="street" x="500" y="1050" font-size="18">CỔNG CHÍNH</text><text class="street" x="500" y="1092" font-size="18">ĐƯỜNG LÊ LỢI</text>
+        <rect class="zone" id="z0" x="300" y="948" width="360" height="118" rx="12"/>
+        <rect class="zone" id="z1" x="300" y="240" width="342" height="180" rx="14"/>
+        <rect class="zone" id="z2" x="426" y="388" width="104" height="104" rx="52"/>
+        <rect class="zone" id="z3" x="370" y="70" width="260" height="78" rx="12"/>
+        <rect class="zone" id="z4" x="300" y="500" width="392" height="172" rx="16"/>
+        <rect class="zone" id="z5a" x="730" y="212" width="88" height="392" rx="10"/>
+        <rect class="zone" id="z5b" x="184" y="212" width="88" height="392" rx="10"/>
+        <g id="pin" style="display:none" transform="translate(480,1000)">
+          <g class="pin-bounce"><path d="M0 0 C -14 -20 -18 -30 -18 -38 A 18 18 0 1 1 18 -38 C 18 -30 14 -20 0 0 Z" fill="var(--brick)" stroke="#fff" stroke-width="3"/><circle cx="0" cy="-38" r="7.5" fill="#fff"/></g>
+        </g>
+      </svg>
+    </div>
+    <div class="tl-head">Toàn bộ chương trình</div>
+    <div class="tl" id="tl"><div class="tl-progress" id="tlProgress"></div></div>
+    <div class="recent" id="recentBox" style="display:none"><h3>Cảm xúc vừa gửi</h3><div id="recentList"></div></div>
+    <p class="foot">Bản đồ tự sáng theo giờ thực · Không cần tải lại</p>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== CẤU HÌNH ===== */
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyj6QeXihAAH_2oFxpvUF3frDjQwQs5N4i27qZOW-42xfpdRHg9KSVFfj-Ko80VrZ4F/exec';
+var EVENT_DATE = '2026-07-18';
+/* Test giờ: thêm ?demo=09:15 vào URL */
+
+var MOODS = [
+  ['🥹','Bồi hồi'],['😊','Hạnh phúc'],['🥲','Xúc động'],['🏫','Nhớ trường'],
+  ['🤩','Háo hức'],['🌟','Tự hào'],['🙏','Biết ơn'],['😢','Rưng rưng'],
+  ['🕊️','Bình yên'],['😄','Vui'],['✨','Trẻ lại'],['❤️','Thương']
+];
+var RUNDOWN = [
+  { s:390, e:450, name:'Buổi phát thanh trước giờ vào lớp', slot:'Phát thanh' },
+  { s:450, e:510, name:'Nắng sân trường',                    slot:'Nắng sân trường' },
+  { s:510, e:540, name:'Khi ta 18… rồi 38',                  slot:'Khi ta 18... rồi 38' },
+  { s:540, e:660, name:'Lễ kỷ niệm',                         slot:'Lễ kỷ niệm' },
+  { s:690, e:810, name:'Tiệc tri ân',                        slot:'Tiệc tri ân' },
+  { s:810, e:1440, name:'Lớp chúng mình',                    slot:'Lớp chúng mình' }
+];
+var ZONE_LABEL=['Cổng chính','Sân trường · Backdrop','Tượng Bác Hồ','Hội trường','Sân tiệc · Nhà chơi','Dãy A & Dãy B'];
+var ZONE_IDS=[['z0'],['z1'],['z2'],['z3'],['z4'],['z5a','z5b']];
+var ZONE_PIN=[[480,1000],[470,320],[478,440],[500,110],[490,595],[500,610]];
+var CLOUD_COLORS=['#8f1d1d','#183f30','#b98a3c','#2c5a45','#b52a2a'];
+function hhmm(m){var h=Math.floor(m/60),mm=m%60;return h+'h'+(mm?(mm<10?'0'+mm:mm):'');}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+/* ===== JSONP ===== */
+var _cbId=0;
+function jsonp(params,cb,onErr){
+  var name='cb_'+(++_cbId)+'_'+Date.now(),s=document.createElement('script');
+  var timer=setTimeout(function(){cleanup();onErr&&onErr('timeout');},12000);
+  function cleanup(){clearTimeout(timer);delete window[name];if(s.parentNode)s.parentNode.removeChild(s);}
+  window[name]=function(d){cleanup();cb(d);};
+  var qs=Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
+  s.src=SCRIPT_URL+'?'+qs+'&callback='+name;
+  s.onerror=function(){cleanup();onErr&&onErr('neterr');};
+  document.head.appendChild(s);
+}
+
+/* ===== STATE ===== */
+var DEV_KEY='hoikhoa0306_dev',EMO_KEY='hoikhoa0306_emo';
+var deviceId=localStorage.getItem(DEV_KEY);
+if(!deviceId){deviceId='d'+Date.now()+Math.random().toString(36).slice(2,8);try{localStorage.setItem(DEV_KEY,deviceId);}catch(e){}}
+var myEmo=null;try{myEmo=JSON.parse(localStorage.getItem(EMO_KEY)||'null');}catch(e){}
+var lastStats=null, mapStarted=false;
+
+/* ===== TABS ===== */
+function showTab(name){
+  ['emotion','cloud','map'].forEach(function(t){
+    document.getElementById('view-'+t).classList.toggle('on',t===name);
+    document.getElementById('tab-'+t).classList.toggle('active',t===name);
+  });
+  if(name==='map')startMap();
+  if(name==='cloud')renderCloud();
+}
+
+/* ===== EMOTION INPUT ===== */
+var $moods=document.getElementById('moods');
+$moods.innerHTML=MOODS.map(function(m,i){
+  return '<button class="mood" data-i="'+i+'"><span class="em">'+m[0]+'</span><span>'+m[1]+'</span></button>';
+}).join('');
+$moods.addEventListener('click',function(e){
+  var b=e.target.closest('.mood');if(!b)return;
+  submitEmo(MOODS[+b.getAttribute('data-i')][1], b);
+});
+document.getElementById('otherBtn').addEventListener('click',function(){
+  var v=document.getElementById('otherInput').value.trim();
+  if(v)submitEmo(v.charAt(0).toUpperCase()+v.slice(1), null);
+});
+document.getElementById('otherInput').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('otherBtn').click();});
+document.getElementById('reBtn').addEventListener('click',function(){
+  document.getElementById('myEmo').style.display='none';
+});
+
+function submitEmo(word, btn){
+  if(btn){btn.classList.add('busy');}
+  jsonp({action:'emotion',id:deviceId,emo:word},function(res){
+    if(btn)btn.classList.remove('busy');
+    if(res&&res.ok){
+      myEmo={emo:word,time:res.time};try{localStorage.setItem(EMO_KEY,JSON.stringify(myEmo));}catch(e){}
+      showMyEmo();toast(res.updated?'Đã đổi cảm xúc của bạn':'Cảm ơn bạn đã chia sẻ ❤️');
+      document.getElementById('otherInput').value='';
+      pollStats();setTimeout(function(){showTab('cloud');},700);
+    }else toast('Có lỗi, thử lại giúp mình nhé.');
+  },function(){if(btn)btn.classList.remove('busy');toast('Mạng chập chờn — chạm lại nhé.');});
+}
+function showMyEmo(){
+  if(!myEmo)return;
+  document.getElementById('myEmoWord').textContent='“'+myEmo.emo+'”';
+  document.getElementById('myEmo').style.display='block';
+}
+if(myEmo)showMyEmo();
+
+/* ===== CLOUD ===== */
+function renderCloud(){
+  var box=document.getElementById('cloud');
+  if(!lastStats||!lastStats.words||!lastStats.words.length){
+    box.innerHTML='<span class="ph">Chưa có cảm xúc nào — hãy là người đầu tiên.</span>';return;
+  }
+  var max=lastStats.words[0].c;
+  box.innerHTML=lastStats.words.map(function(w,i){
+    var size=Math.round(16+(w.c/max)*40);
+    var col=CLOUD_COLORS[i%CLOUD_COLORS.length];
+    var tilt=((i*37)%11)-5;
+    return '<span style="font-size:'+size+'px;color:'+col+';transform:rotate('+tilt+'deg)" title="'+w.c+' người">'+esc(w.w)+'</span>';
+  }).join('');
+}
+
+/* ===== TIME ===== */
+function nowMinutes(){
+  var demo=new URLSearchParams(location.search).get('demo');
+  if(demo&&/^\d{1,2}:\d{2}$/.test(demo)){var p=demo.split(':');return (+p[0])*60+(+p[1]);}
+  var d=new Date();return d.getHours()*60+d.getMinutes()+d.getSeconds()/60;
+}
+function isEventDay(){
+  if(new URLSearchParams(location.search).get('demo'))return true;
+  var d=new Date();return (d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'))===EVENT_DATE;
+}
+
+/* ===== MAP + TIMELINE ===== */
+function startMap(){
+  if(mapStarted)return;mapStarted=true;
+  buildTL();tick();setInterval(tick,1000);
+}
+function buildTL(){
+  var html='<div class="tl-progress" id="tlProgress"></div>';
+  RUNDOWN.forEach(function(seg,i){
+    html+='<div class="seg" data-i="'+i+'"><span class="dot"></span>'
+      +'<div class="time">'+hhmm(seg.s)+' – '+(seg.e>=1440?'':hhmm(seg.e))+(seg.e>=1440?' trở đi':'')+'</div>'
+      +'<div class="name">'+seg.name+'</div><div class="seg-count" data-cnt="'+i+'"></div></div>';
+  });
+  document.getElementById('tl').innerHTML=html;
+}
+function tick(){
+  var m=nowMinutes(),ev=isEventDay();
+  document.getElementById('clock').textContent=String(Math.floor(m/60)%24).padStart(2,'0')+':'+String(Math.floor(m%60)).padStart(2,'0');
+  var curIdx=-1;RUNDOWN.forEach(function(seg,i){if(m>=seg.s&&m<seg.e)curIdx=i;});
+  var focusIdx=curIdx;
+  if(focusIdx<0){focusIdx=(m<RUNDOWN[0].s)?0:RUNDOWN.length-1;
+    for(var i=0;i<RUNDOWN.length;i++){if(m<RUNDOWN[i].s){focusIdx=i;break;}}}
+  var live=(curIdx>=0&&ev),badge=document.getElementById('nbBadge'),seg=RUNDOWN[focusIdx];
+  document.getElementById('nbName').textContent=seg.name;
+  document.getElementById('nbTime').textContent=hhmm(seg.s)+' – '+(seg.e>=1440?'trở đi':hhmm(seg.e));
+  document.getElementById('nbLoc').textContent=ZONE_LABEL[focusIdx];
+  var bt=document.getElementById('nbBadgeText');
+  if(live){badge.className='nb-badge';bt.textContent='Đang diễn ra';}
+  else if(curIdx<0&&m<RUNDOWN[0].s){badge.className='nb-badge soft';bt.textContent='Sắp diễn ra';}
+  else{badge.className='nb-badge soft';bt.textContent=ev?'Sắp diễn ra':'Xem trước';}
+  var nbCount=document.getElementById('nbCount');
+  nbCount.textContent=(live&&lastStats&&lastStats.bySlot&&lastStats.bySlot[seg.slot])?(' · '+lastStats.bySlot[seg.slot]+' bạn ở khu này'):'';
+  document.querySelectorAll('#map .zone').forEach(function(z){z.classList.remove('active','visited');});
+  RUNDOWN.forEach(function(sg,i){if(m>=sg.e)ZONE_IDS[i].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.add('visited');});});
+  ZONE_IDS[focusIdx].forEach(function(id){var el=document.getElementById(id);if(el){el.classList.remove('visited');el.classList.add('active');}});
+  var pin=document.getElementById('pin');pin.style.display='';pin.setAttribute('transform','translate('+ZONE_PIN[focusIdx][0]+','+ZONE_PIN[focusIdx][1]+')');
+  document.querySelectorAll('#tl .seg').forEach(function(el,i){
+    el.classList.remove('past','now','upcoming');
+    if(i===curIdx&&ev)el.classList.add('now');else if(m>=RUNDOWN[i].e)el.classList.add('past');else el.classList.add('upcoming');
+  });
+  var prog=document.getElementById('tlProgress');
+  if(prog){var first=390,last=930,pct=Math.max(0,Math.min(1,(m-first)/(last-first)));
+    prog.style.height=(pct*(document.getElementById('tl').scrollHeight-16))+'px';}
+}
+
+/* ===== POLL (emostats) ===== */
+function pollStats(){
+  jsonp({action:'emostats'},function(res){
+    if(!res||!res.ok)return;lastStats=res;
+    document.getElementById('cloudTotal').textContent=res.total;
+    document.getElementById('total').textContent=res.total;
+    if(document.getElementById('view-cloud').classList.contains('on'))renderCloud();
+    var map={'Phát thanh':0,'Nắng sân trường':1,'Khi ta 18... rồi 38':2,'Lễ kỷ niệm':3,'Tiệc tri ân':4,'Lớp chúng mình':5};
+    document.querySelectorAll('#tl .seg-count').forEach(function(c){c.textContent='';});
+    Object.keys(res.bySlot||{}).forEach(function(k){
+      var i=map[k];if(i===undefined)return;
+      var el=document.querySelector('#tl .seg-count[data-cnt="'+i+'"]');
+      if(el)el.textContent='● '+res.bySlot[k]+' bạn trong khung này';
+    });
+    if(res.recent&&res.recent.length){
+      document.getElementById('recentBox').style.display='block';
+      document.getElementById('recentList').innerHTML=res.recent.slice(0,8).map(function(r){
+        return '<div class="row"><span class="em">💬</span><span><b>'+esc(r.emo)+'</b></span><span class="t">'+String(r.ts).slice(11,16)+'</span></div>';
+      }).join('');
+    }
+  });
+}
+
+/* ===== INIT ===== */
+if(myEmo)showTab('cloud');   // đã gửi rồi -> vào thẳng đám mây
+pollStats();setInterval(pollStats,20000);
+</script>
+</body>
+</html>
