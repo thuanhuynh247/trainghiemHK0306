@@ -159,6 +159,42 @@
   .cft{position:absolute;top:-16px;width:9px;height:14px;border-radius:2px;animation:cft-fall linear forwards}
   @keyframes cft-fall{to{transform:translateY(110vh) rotate(720deg);opacity:.9}}
 
+  /* hot banner (đang hot 15') */
+  .hot-banner{display:none;align-items:center;gap:10px;margin:6px 0 12px;padding:12px 15px;border-radius:14px;background:linear-gradient(135deg,#b52a2a,#8f1d1d);color:var(--paper);box-shadow:0 12px 28px -18px rgba(143,29,29,.8)}
+  .hot-banner.on{display:flex}
+  .hot-banner .hb-em{font-size:24px}
+  .hot-banner .hb-t{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:700}
+  .hot-banner .hb-n{font-family:'Playfair Display',serif;font-weight:700;font-size:17px;line-height:1.1}
+
+  /* class picker + share */
+  .pp-actions{display:flex;gap:8px;margin:2px 0 14px}
+  .pp-actions select{flex:1;font-family:inherit;font-size:14px;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;background:#fffdf7;color:var(--ink)}
+  .pp-actions .share{flex:0 0 auto;border:0;border-radius:12px;padding:0 16px;font-family:inherit;font-weight:700;font-size:14px;color:var(--paper);background:var(--green);cursor:pointer}
+
+  /* leaderboard lớp */
+  .board{margin-top:24px}
+  .board h3{font-family:'Playfair Display',serif;font-size:16px;color:var(--green);margin:0 0 3px}
+  .board .bsub{font-size:12px;color:var(--ink-soft);margin:0 0 12px}
+  .brow{display:flex;align-items:center;gap:10px;padding:8px 0}
+  .brow .rk{width:22px;text-align:center;font-family:'Playfair Display',serif;font-weight:700;color:var(--brass)}
+  .brow .bn{flex:0 0 96px;font-weight:600;font-size:14px}
+  .brow .bbar{flex:1;height:10px;border-radius:99px;background:var(--paper-2);overflow:hidden}
+  .brow .bbar i{display:block;height:100%;background:linear-gradient(90deg,var(--brass),var(--brick));transition:width .6s}
+  .brow .bc{width:56px;text-align:right;font-weight:700;font-size:13px;color:var(--brick)}
+  .brow.top1 .bn{color:var(--brick)}
+  .board .empty{font-size:13px;color:var(--ink-soft)}
+
+  /* share card modal */
+  .modal{position:fixed;inset:0;display:none;place-items:center;z-index:80;background:rgba(24,15,10,.6);backdrop-filter:blur(3px);padding:20px}
+  .modal.on{display:grid;animation:fade .25s}
+  .modal .mbox{max-width:360px;width:100%;text-align:center}
+  .modal img{width:100%;border-radius:14px;box-shadow:0 20px 50px -18px rgba(0,0,0,.6)}
+  .modal .mb-actions{display:flex;gap:10px;margin-top:14px}
+  .modal .mb-actions a,.modal .mb-actions button{flex:1;text-decoration:none;text-align:center;border:0;border-radius:12px;padding:13px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer}
+  .modal .dl{background:var(--brick);color:var(--paper)}
+  .modal .cl{background:transparent;color:var(--paper);border:1.5px solid rgba(244,236,216,.5)}
+  .modal .hint{color:rgba(244,236,216,.85);font-size:12px;margin-top:10px}
+
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -216,12 +252,23 @@
 
     <div class="sec-head" id="actAnchor">Check-in hoạt động — gom ⭐</div>
     <p class="sec-sub">Chạm hoạt động bạn đã tham gia · mỗi hoạt động check-in một lần</p>
+    <div class="hot-banner" id="hotBanner"><span class="hb-em" id="hotEm">🔥</span><span><span class="hb-t">Đang hot · 15 phút qua</span><span class="hb-n" id="hotName"></span></span></div>
     <div class="passport" id="passport">
       <svg class="pp-ring" viewBox="0 0 80 80"><circle class="pp-bg" cx="40" cy="40" r="34"/><circle class="pp-fg" id="ppFg" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/><text class="pp-num" id="ppNum" x="40" y="40">0/9</text></svg>
       <div class="pp-txt"><b>Hộ chiếu ngày về</b><span id="ppRemain">Chạm các hoạt động để gom ⭐</span></div>
     </div>
+    <div class="pp-actions">
+      <select id="clsSelect" aria-label="Lớp của bạn"></select>
+      <button class="share" id="shareBtn">Thẻ khoe ⭐</button>
+    </div>
     <div class="cbadge" id="cbadge"><div class="t">🏆 Nhà vô địch ngày về!</div><div class="s">Bạn đã ghé đủ 9 hoạt động — trọn vẹn một ngày về</div></div>
     <div class="acts" id="actGrid"></div>
+
+    <div class="board" id="boardBox" style="display:none">
+      <h3>Lớp về đông nhất</h3>
+      <p class="bsub">Xếp theo số người đã chọn lớp · check-in hoạt động</p>
+      <div id="boardList"></div>
+    </div>
 
     <div class="sec-head2">Chương trình đang diễn ra</div>
     <div class="clk" id="clock">--:--</div>
@@ -275,10 +322,16 @@
 </div>
 <div class="toast" id="toast"></div>
 <div id="confetti"></div>
+<canvas id="cardCanvas" width="1080" height="1350" style="display:none"></canvas>
+<div class="modal" id="cardModal"><div class="mbox">
+  <img id="cardImg" alt="Thẻ khoe ngày về">
+  <div class="mb-actions"><a class="dl" id="cardDl" download="ho-chieu-ngay-ve.png">Tải ảnh</a><button class="cl" id="cardClose">Đóng</button></div>
+  <div class="hint">Lưu ảnh rồi đăng Facebook · gắn #HenNhauNgayVe</div>
+</div></div>
 
 <script>
 /* ===== CẤU HÌNH ===== */
-var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZX1ER5YbivVYMSHevV6DZ48VKw6fjQxPfmnvdWPB74WPlukwwW_kB40_dUpJB3UDD/exec';
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZClNV4WXjYLGjVN2sblVQhafY9_wRxAlV1BehykVlCe5CbGjkLuWx1v1Fpl4EJ-H0/exec';
 var EVENT_DATE = '2026-07-18';
 var EXPECTED   = 291;   // số người dự kiến cho thanh tiến trình; 0 để ẩn
 /* Test giờ: thêm ?demo=09:15 vào URL */
@@ -309,6 +362,8 @@ var ZONE_LABEL=['Cổng chính','Sân trường · Backdrop','Tượng Bác Hồ
 var ZONE_IDS=[['z0'],['z1'],['z2'],['z3'],['z4'],['z5a','z5b']];
 var ZONE_PIN=[[480,1000],[470,320],[478,440],[500,110],[490,595],[500,610]];
 var CLOUD_COLORS=['#8f1d1d','#183f30','#b98a3c','#2c5a45','#b52a2a'];
+/* 20 lớp — SỬA cho khớp danh sách lớp thật của khóa */
+var CLASSES=['12/1','12/2','12/3','12/4','12/5','12/6','12/7','12/8','12/9','12/10','12 Toán',,'12 Lý Sinh','12 Hóa','12 Văn Pháp','12 Anh'];
 function hhmm(m){var h=Math.floor(m/60),mm=m%60;return h+'h'+(mm?(mm<10?'0'+mm:mm):'');}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 
@@ -330,6 +385,8 @@ var deviceId=localStorage.getItem(DEV_KEY);
 if(!deviceId){deviceId='d'+Date.now()+Math.random().toString(36).slice(2,8);try{localStorage.setItem(DEV_KEY,deviceId);}catch(e){}}
 var myEmo=null;try{myEmo=JSON.parse(localStorage.getItem(EMO_KEY)||'null');}catch(e){}
 var myActs=[];try{myActs=JSON.parse(localStorage.getItem(ACT_KEY)||'[]');}catch(e){}
+var CLS_KEY='hoikhoa0306_cls';
+var myClass=null;try{myClass=localStorage.getItem(CLS_KEY)||null;}catch(e){}
 var lastStats=null, mapStarted=false;
 
 /* ===== TABS ===== */
@@ -380,13 +437,11 @@ function renderCloud(){
 /* ===== ACTIVITY CHECK-IN ===== */
 function renderActGrid(byKey){
   byKey=byKey||{};
-  var topKey=null,topN=0;ACT.forEach(function(a){var n=byKey[a.key]||0;if(n>topN){topN=n;topKey=a.key;}});
   document.getElementById('actGrid').innerHTML=ACT.map(function(a){
-    var n=byKey[a.key]||0, done=myActs.indexOf(a.key)>=0, hot=(a.key===topKey&&topN>0);
+    var n=byKey[a.key]||0, done=myActs.indexOf(a.key)>=0;
     return '<button class="acard'+(done?' done':'')+'" data-key="'+a.key+'">'
       +'<span class="ac-em">'+a.em+'</span>'
       +'<span class="ac-body"><span class="ac-name">'+a.name+'</span><span class="ac-meta">'+n+' lượt check-in</span></span>'
-      +(hot?'<span class="ac-hot">🔥 sôi nổi</span>':'')
       +'<span class="ac-cta">'+(done?'⭐ Đã check-in':'Check-in')+'</span></button>';
   }).join('');
   updatePassport();
@@ -515,6 +570,8 @@ function pollStats(){
     renderProg(res.participants);
     drawCurve(res.series);
     renderActGrid(res.byKey);
+    renderHot(res.hotKey);
+    renderClassBoard(res.classBoard);
     if(mapStarted)renderActMarkers(res.byKey);
     if(document.getElementById('view-cloud').classList.contains('on'))renderCloud();
     if(res.recent&&res.recent.length){
@@ -576,8 +633,88 @@ function initDeepLink(){
   };
 }
 
+/* ===== LỚP + BẢNG XẾP HẠNG ===== */
+function buildClassSelect(){
+  var s=document.getElementById('clsSelect');
+  s.innerHTML='<option value="">Chọn lớp của bạn…</option>'+CLASSES.map(function(c){
+    return '<option value="'+esc(c)+'"'+(myClass===c?' selected':'')+'>Lớp '+esc(c)+'</option>';
+  }).join('');
+  s.onchange=function(){var c=s.value;if(c)submitClass(c);};
+}
+function submitClass(cls){
+  jsonp({action:'setclass',id:deviceId,cls:cls},function(res){
+    if(res&&res.ok){myClass=cls;try{localStorage.setItem(CLS_KEY,cls);}catch(e){}toast('Đã chọn lớp '+cls);pollStats();}
+    else toast('Có lỗi, thử lại nhé.');
+  },function(){toast('Mạng chập chờn — thử lại nhé.');});
+}
+function renderClassBoard(board){
+  if(!board||!board.length){document.getElementById('boardBox').style.display='none';return;}
+  document.getElementById('boardBox').style.display='block';
+  var max=1;board.forEach(function(b){max=Math.max(max,b.people);});
+  document.getElementById('boardList').innerHTML=board.slice(0,10).map(function(b,i){
+    var mine=(b.cls===myClass);
+    return '<div class="brow'+(i===0?' top1':'')+'"><span class="rk">'+(i+1)+'</span>'
+      +'<span class="bn">'+esc(b.cls)+(mine?' •':'')+'</span>'
+      +'<span class="bbar"><i style="width:'+(b.people/max*100)+'%"></i></span>'
+      +'<span class="bc">'+b.people+' người</span></div>';
+  }).join('');
+}
+
+/* ===== ĐANG HOT (15') ===== */
+function renderHot(hotKey){
+  var box=document.getElementById('hotBanner');
+  if(!hotKey||!ACTMAP[hotKey]){box.classList.remove('on');return;}
+  var a=ACTMAP[hotKey];
+  document.getElementById('hotEm').textContent=a.em;
+  document.getElementById('hotName').textContent=a.name;
+  box.classList.add('on');
+}
+
+/* ===== THẺ KHOE (canvas) ===== */
+function drawCard(cb){
+  var cv=document.getElementById('cardCanvas'),g=cv.getContext('2d'),W=1080,H=1350;
+  function paint(){
+    g.fillStyle='#f4ecd8';g.fillRect(0,0,W,H);
+    g.fillStyle='#8f1d1d';g.fillRect(0,0,W,150);
+    g.fillStyle='#f4ecd8';g.textAlign='center';g.textBaseline='middle';
+    g.font='700 40px "Playfair Display",serif';g.fillText('HẸN NHAU NGÀY VỀ',W/2,66);
+    g.font='600 24px "Be Vietnam Pro",sans-serif';g.fillText('Quốc Học Huế · Khóa 2003–2006 · 18/07/2026',W/2,108);
+    g.fillStyle='#183f30';g.font='700 34px "Playfair Display",serif';g.fillText('HỘ CHIẾU NGÀY VỀ',W/2,228);
+    var n=myActs.length;
+    g.fillStyle='#8f1d1d';g.font='900 130px "Playfair Display",serif';g.fillText(n+' / 9',W/2,340);
+    g.fillStyle='#b98a3c';g.font='600 26px "Be Vietnam Pro",sans-serif';g.fillText(n>=9?'⭐ Trọn vẹn — Nhà vô địch ngày về ⭐':'hoạt động đã ghé',W/2,430);
+    // lưới 9 hoạt động
+    var cols=3,cw=300,ch=190,x0=(W-cols*cw)/2,y0=490;
+    ACT.forEach(function(a,i){
+      var cx=x0+(i%cols)*cw+cw/2, cy=y0+Math.floor(i/cols)*ch+ch/2, done=myActs.indexOf(a.key)>=0;
+      g.globalAlpha=done?1:.32;
+      g.font='64px "Be Vietnam Pro",sans-serif';g.fillStyle='#241610';g.fillText(a.em,cx,cy-24);
+      g.font='600 22px "Be Vietnam Pro",sans-serif';g.fillStyle=done?'#8f1d1d':'#5b473a';
+      g.fillText(a.name.length>16?a.name.slice(0,15)+'…':a.name,cx,cy+34);
+      if(done){g.font='30px "Be Vietnam Pro",sans-serif';g.fillText('⭐',cx+96,cy-52);}
+      g.globalAlpha=1;
+    });
+    var y=y0+3*ch+30;
+    if(myEmo){g.fillStyle='#183f30';g.font='600 30px "Be Vietnam Pro",sans-serif';g.fillText('Cảm xúc: “'+myEmo.emo+'”',W/2,y);y+=54;}
+    if(myClass){g.fillStyle='#5b473a';g.font='500 26px "Be Vietnam Pro",sans-serif';g.fillText('Lớp '+myClass,W/2,y);y+=50;}
+    g.fillStyle='#b98a3c';g.font='700 26px "Be Vietnam Pro",sans-serif';g.fillText('#HenNhauNgayVe · #QuocHoc0306',W/2,H-46);
+    cb(cv.toDataURL('image/png'));
+  }
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(paint);else paint();
+}
+function showCard(){
+  drawCard(function(url){
+    document.getElementById('cardImg').src=url;
+    document.getElementById('cardDl').href=url;
+    document.getElementById('cardModal').classList.add('on');
+  });
+}
+document.getElementById('shareBtn').addEventListener('click',showCard);
+document.getElementById('cardClose').addEventListener('click',function(){document.getElementById('cardModal').classList.remove('on');});
+document.getElementById('cardModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('on');});
+
 /* ===== INIT ===== */
-renderActGrid({});updatePassport();checkComplete();initDeepLink();
+renderActGrid({});updatePassport();checkComplete();initDeepLink();buildClassSelect();
 if(myEmo)showTab('cloud');
 pollStats();setInterval(pollStats,15000);
 </script>
