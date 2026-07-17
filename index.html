@@ -101,11 +101,16 @@
   .edge{fill:none;stroke:var(--ink);stroke-width:4}
   .street{fill:var(--ink-soft);font-family:'Be Vietnam Pro';font-weight:700;letter-spacing:.12em;text-anchor:middle}
   .zone{fill:rgba(185,138,60,.16);stroke:var(--brass);stroke-width:0;opacity:0;transition:opacity .5s}
+  .blk{fill:#d9d3c5}
+  .blbl{fill:#241610;font-family:'Be Vietnam Pro',sans-serif;font-weight:700;text-anchor:middle;dominant-baseline:central}
+  .blbl.key{fill:#8f1d1d}
+  .cap{fill:#8f1d1d;font-family:'Playfair Display',serif;font-weight:700;text-anchor:middle;letter-spacing:.06em}
+  .tmap{fill:#8f1d1d;font-family:'Playfair Display',serif;font-weight:900;text-anchor:middle;letter-spacing:.14em}
   .zone.visited{opacity:.4;fill:rgba(185,138,60,.14)}
   .zone.active{opacity:1;stroke-width:4;fill:rgba(143,29,29,.14);stroke:var(--brick);filter:drop-shadow(0 0 10px rgba(143,29,29,.5))}
   .act-dot{transition:r .5s,opacity .5s}
-  .act-emo{font-size:15px;dominant-baseline:central}
-  .act-num{fill:#fff;font-family:'Be Vietnam Pro',sans-serif;font-weight:700;font-size:15px;dominant-baseline:central}
+  .act-badge{fill:#8f1d1d;stroke:#fff;stroke-width:2.5}
+  .act-num{fill:#fff;font-family:'Be Vietnam Pro',sans-serif;font-weight:700;font-size:19px;dominant-baseline:central}
   #pin{transition:transform .8s cubic-bezier(.5,1.4,.5,1)}
   .pin-bounce{animation:bounce 1.4s ease-in-out infinite}
   @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
@@ -278,39 +283,15 @@
       <div class="nb-meta"><span id="nbTime"></span> · <span class="loc">📍 <span id="nbLoc"></span></span></div>
     </div>
     <div class="mapwrap">
-      <svg id="map" viewBox="0 0 1000 1110" role="img" aria-label="Sơ đồ sân trường Quốc Học">
-        <rect x="8" y="8" width="984" height="1050" rx="6" fill="#fbf6e9" class="edge"/>
-        <rect class="park" x="60" y="210" width="100" height="360" rx="4"/><text class="mlbl dark" x="110" y="390" font-size="20" transform="rotate(-90 110 390)">BÃI Ô TÔ</text>
-        <rect class="park" x="840" y="210" width="100" height="360" rx="4"/><text class="mlbl dark" x="890" y="390" font-size="20" transform="rotate(-90 890 390)">BÃI XE MÁY</text>
-        <rect class="b" x="375" y="74" width="250" height="70" rx="4"/><text class="mlbl" x="500" y="109" font-size="22">HỘI TRƯỜNG</text>
-        <rect class="b" x="375" y="150" width="250" height="52" rx="4"/><text class="mlbl" x="500" y="176" font-size="19">NHÀ CHƠI</text>
-        <rect class="b" x="186" y="216" width="82" height="384" rx="4"/><text class="mlbl" x="227" y="408" font-size="24" transform="rotate(-90 227 408)">DÃY B</text>
-        <rect class="b" x="732" y="216" width="82" height="384" rx="4"/><text class="mlbl" x="773" y="408" font-size="24" transform="rotate(-90 773 408)">DÃY A</text>
-        <rect class="strip" x="278" y="300" width="16" height="300" rx="4"/><rect class="strip" x="706" y="300" width="16" height="300" rx="4"/>
-        <rect class="g" x="320" y="250" width="96" height="150" rx="8"/><rect class="g" x="430" y="250" width="90" height="96" rx="8"/><rect class="g" x="536" y="250" width="96" height="150" rx="8"/>
-        <rect class="g" x="320" y="510" width="120" height="150" rx="8"/><rect class="g" x="560" y="510" width="120" height="150" rx="8"/>
-        <rect class="g" x="300" y="700" width="120" height="120" rx="8"/><rect class="g" x="560" y="700" width="120" height="120" rx="8"/><rect class="g" x="690" y="700" width="110" height="120" rx="8"/>
-        <rect class="g" x="120" y="874" width="166" height="70" rx="8"/>
-        <circle class="b" cx="478" cy="440" r="44"/><text class="mlbl" x="478" y="434" font-size="15">TƯỢNG</text><text class="mlbl" x="478" y="452" font-size="15">BÁC HỒ</text>
-        <g transform="rotate(-18 419 391)"><rect class="inst" x="384" y="374" width="70" height="34" rx="4"/><text class="mlbl" x="419" y="391" font-size="13">BACKDROP</text></g>
-        <rect class="inst" x="316" y="665" width="120" height="26" rx="4"/><text class="mlbl" x="376" y="678" font-size="13">PHOTOBOOTH</text>
-        <rect class="inst" x="527" y="808" width="16" height="62" rx="3"/><rect class="inst" x="420" y="876" width="130" height="14" rx="3"/><rect class="inst" x="410" y="876" width="14" height="62" rx="3"/>
-        <rect x="286" y="748" width="14" height="46" rx="2" fill="#7a6a55"/><text class="mlbl dark" x="360" y="770" font-size="14">XE ĐẠP</text>
-        <rect class="b" x="294" y="872" width="110" height="72" rx="4"/><text class="mlbl" x="349" y="902" font-size="14">PHÒNG</text><text class="mlbl" x="349" y="920" font-size="14">HIỆU TRƯỞNG</text>
-        <rect class="b" x="556" y="872" width="112" height="72" rx="4"/><text class="mlbl" x="612" y="902" font-size="14">GIÁM THỊ</text><text class="mlbl" x="612" y="920" font-size="14">GIÁO VỤ</text>
-        <rect class="b" x="340" y="978" width="58" height="42" rx="4"/><text class="mlbl" x="369" y="1000" font-size="12">KHÁCH</text>
-        <rect class="b" x="558" y="978" width="58" height="42" rx="4"/><text class="mlbl" x="587" y="1000" font-size="12">BẢO VỆ</text>
-        <line class="edge" x1="8" y1="1058" x2="410" y2="1058"/><line class="edge" x1="590" y1="1058" x2="992" y2="1058"/>
-        <text class="street" x="500" y="1050" font-size="18">CỔNG CHÍNH</text><text class="street" x="500" y="1092" font-size="18">ĐƯỜNG LÊ LỢI</text>
-        <rect class="zone" id="z0" x="300" y="948" width="360" height="118" rx="12"/>
-        <rect class="zone" id="z1" x="300" y="240" width="342" height="180" rx="14"/>
-        <rect class="zone" id="z2" x="426" y="388" width="104" height="104" rx="52"/>
-        <rect class="zone" id="z3" x="370" y="70" width="260" height="78" rx="12"/>
-        <rect class="zone" id="z4" x="300" y="500" width="392" height="172" rx="16"/>
-        <rect class="zone" id="z5a" x="730" y="212" width="88" height="392" rx="10"/>
-        <rect class="zone" id="z5b" x="184" y="212" width="88" height="392" rx="10"/>
-        <g id="pin" style="display:none" transform="translate(480,1000)">
-          <g class="pin-bounce"><path d="M0 0 C -14 -20 -18 -30 -18 -38 A 18 18 0 1 1 18 -38 C 18 -30 14 -20 0 0 Z" fill="var(--brick)" stroke="#fff" stroke-width="3"/><circle cx="0" cy="-38" r="7.5" fill="#fff"/></g>
+      <svg id="map" viewBox="0 0 1000 707" role="img" aria-label="Bản đồ trải nghiệm Hội khóa 03-06">
+        <image href="data/map.png" x="0" y="0" width="1000" height="707"/>
+        <rect class="zone" id="z-gate"  x="380" y="560" width="160" height="110" rx="16"/>
+        <rect class="zone" id="z-yard"  x="320" y="200" width="300" height="170" rx="18"/>
+        <rect class="zone" id="z-dayA"  x="716" y="176" width="74"  height="240" rx="8"/>
+        <rect class="zone" id="z-dayB"  x="198" y="176" width="74"  height="240" rx="8"/>
+        <rect class="zone" id="z-hall"  x="300" y="88"  width="272" height="56"  rx="10"/>
+        <g id="pin" style="display:none" transform="translate(450,610)">
+          <g class="pin-bounce"><path d="M0 0 C -12 -17 -16 -26 -16 -33 A 16 16 0 1 1 16 -33 C 16 -26 12 -17 0 0 Z" fill="var(--brick)" stroke="#fff" stroke-width="3"/><circle cx="0" cy="-33" r="6.5" fill="#fff"/></g>
         </g>
       </svg>
     </div>
@@ -331,7 +312,7 @@
 
 <script>
 /* ===== CẤU HÌNH ===== */
-var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwMQTm2jo4mr9N746AxrL4mzeHSDT3Rdll-IwmSCabrMCzbon4eMerLpwSih1D8Ksku/exec';
+var SCRIPT_URL = 'https://script.google.com/macros/library/d/1JcEN50BZ_ZGmqnHAkAiF8iZmtLfvpEiHbry0cQSIP3munDY9sVKTXTEp/5';
 var EVENT_DATE = '2026-07-18';
 var EXPECTED   = 291;   // số người dự kiến cho thanh tiến trình; 0 để ẩn
 /* Test giờ: thêm ?demo=09:15 vào URL */
@@ -339,31 +320,31 @@ var EXPECTED   = 291;   // số người dự kiến cho thanh tiến trình; 0 
 var MOODS=[['🥹','Bồi hồi'],['😊','Hạnh phúc'],['🥲','Xúc động'],['🏫','Nhớ trường'],['🤩','Háo hức'],['🌟','Tự hào'],['🙏','Biết ơn'],['😢','Rưng rưng'],['🕊️','Bình yên'],['😄','Vui'],['✨','Trẻ lại'],['❤️','Thương']];
 /* 9 hoạt động (poster) — xy neo trên bản đồ */
 var ACT=[
-  {key:'booth',    em:'📸', name:'Booth chụp ảnh',        xy:[395,650]},
-  {key:'game',     em:'🤸', name:'Trò chơi thanh xuân',    xy:[714,460]},
-  {key:'hoahoctro',em:'📖', name:'Đọc Hoa Học Trò',        xy:[360,320]},
-  {key:'cafe',     em:'☕', name:'Cafe – bánh mì',          xy:[300,760]},
-  {key:'radio',    em:'📻', name:'Radio Hội khóa',          xy:[600,320]},
-  {key:'maybay',   em:'✈️', name:'Lời nhắn máy bay giấy',   xy:[478,555]},
-  {key:'acoustic', em:'🎸', name:'Hát mộc Acoustic',        xy:[620,590]},
-  {key:'cothidua', em:'🚩', name:'Cờ thi đua',              xy:[740,760]},
-  {key:'merch',    em:'🛍️', name:'Merchandise Quốc Học',    xy:[417,905]}
+  {key:'congtrinh',em:'🏛️', name:'Công trình hội khóa',       short:'Công trình', xy:[280,452]},
+  {key:'bando',    em:'🗺️', name:'Bản đồ trải nghiệm',        short:'Bản đồ',     xy:[550,396]},
+  {key:'luuniem',  em:'🛍️', name:'Lưu niệm Quốc Học',         short:'Lưu niệm',   xy:[370,396]},
+  {key:'frame',    em:'📸', name:'Frame thủng · Quốc Học Huế', short:'Frame thủng',xy:[315,300]},
+  {key:'timten',   em:'✍️', name:'Tìm tên · gửi tuổi 18',      short:'Tìm tên',    xy:[420,170]},
+  {key:'canteen',  em:'☕', name:'Canteen trốn tiết',          short:'Canteen',    xy:[200,375]},
+  {key:'trangsach',em:'📖', name:'Trang sách học trò',         short:'Trang sách', xy:[420,304]},
+  {key:'luubut',   em:'✈️', name:'Lưu bút ngày xanh',          short:'Lưu bút',    xy:[570,304]},
+  {key:'trochoi',  em:'🏸', name:'Trò chơi sân trường',        short:'Trò chơi',   xy:[720,318]}
 ];
 var ACTMAP={};ACT.forEach(function(a){ACTMAP[a.key]=a;});
 var RUNDOWN=[
-  {s:390,e:450,name:'Buổi phát thanh trước giờ vào lớp',slot:'Phát thanh'},
-  {s:450,e:510,name:'Nắng sân trường',slot:'Nắng sân trường'},
-  {s:510,e:540,name:'Khi ta 18… rồi 38',slot:'Khi ta 18... rồi 38'},
-  {s:540,e:660,name:'Lễ kỷ niệm',slot:'Lễ kỷ niệm'},
-  {s:690,e:810,name:'Tiệc tri ân',slot:'Tiệc tri ân'},
+  {s:390,e:460,name:'Check-in & Phát thanh trước giờ vô lớp',slot:'Check-in & Phát thanh'},
+  {s:460,e:525,name:'Nắng sân trường · Tiết chào cờ (7h40–8h45)',slot:'Chào cờ'},
+  {s:525,e:570,name:'Khi ta 18… rồi 38 · Sinh hoạt lớp (8h45–9h30)',slot:'Sinh hoạt lớp'},
+  {s:570,e:700,name:'Lễ kỷ niệm · Hẹn nhau ngày về (9h30–11h40)',slot:'Lễ kỷ niệm'},
+  {s:700,e:810,name:'Tiệc tri ân · Ngồi lại bên nhau (11h40–13h30)',slot:'Tiệc tri ân'},
   {s:810,e:1440,name:'Lớp chúng mình',slot:'Lớp chúng mình'}
 ];
-var ZONE_LABEL=['Cổng chính','Sân trường · Backdrop','Tượng Bác Hồ','Hội trường','Sân tiệc · Nhà chơi','Dãy A & Dãy B'];
-var ZONE_IDS=[['z0'],['z1'],['z2'],['z3'],['z4'],['z5a','z5b']];
-var ZONE_PIN=[[480,1000],[470,320],[478,440],[500,110],[490,595],[500,610]];
+var ZONE_LABEL=['Cổng · Khu check-in','Sân trường · Tượng Bác','Dãy A & Dãy B (sinh hoạt lớp)','Hội trường','Hội trường · Nhà chơi','Dãy A & Dãy B'];
+var ZONE_IDS=[['z-gate'],['z-yard'],['z-dayA','z-dayB'],['z-hall'],['z-hall'],['z-dayA','z-dayB']];
+var ZONE_PIN=[[450,600],[470,250],[470,290],[430,108],[430,132],[470,290]];
 var CLOUD_COLORS=['#8f1d1d','#183f30','#b98a3c','#2c5a45','#b52a2a'];
 /* 20 lớp — SỬA cho khớp danh sách lớp thật của khóa */
-var CLASSES=['12/1','12/2','12/3','12/4','12/5','12/6','12/7','12/8','12/9','12/10','12 Toán',,'12 Lý Sinh','12 Hóa','12 Văn Pháp','12 Anh'];
+var CLASSES=['Toán','Tin','Lý','Hóa','Sinh','Văn','Sử','Địa','Anh 1','Anh 2','Pháp','A1','A2','A3','A4','A5','A6','A7','A8','A9'];
 function hhmm(m){var h=Math.floor(m/60),mm=m%60;return h+'h'+(mm?(mm<10?'0'+mm:mm):'');}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 
@@ -416,7 +397,7 @@ function submitEmo(word,btn){
       showMyEmo();
       toast(res.updated?'Đã đổi cảm xúc của bạn':'Bạn là người thứ '+res.total+' đã về ❤️');
       document.getElementById('otherInput').value='';pollStats();
-    }else toast('Có lỗi, thử lại giúp mình nhé.');
+    }else toast('Lỗi: '+((res&&res.error)||'thử lại nhé'));
   },function(){if(btn)btn.classList.remove('busy');toast('Mạng chập chờn — chạm lại nhé.');});
 }
 function showMyEmo(){if(!myEmo)return;document.getElementById('myEmoWord').textContent='“'+myEmo.emo+'”';document.getElementById('myEmo').style.display='block';}
@@ -459,7 +440,7 @@ function submitAct(key){
       toast('⭐ Đã check-in: '+a.name);
       updatePassport();checkComplete();
       pollStats();
-    }else toast('Có lỗi, thử lại nhé.');
+    }else toast('Lỗi: '+((res&&res.error)||'thử lại nhé'));
   },function(){toast('Mạng chập chờn — chạm lại nhé.');});
 }
 
@@ -513,20 +494,19 @@ function ensureActMarkers(){
   if(document.getElementById('acts'))return;
   var g=document.createElementNS(SVGNS,'g');g.id='acts';
   ACT.forEach(function(a,i){
-    var grp=document.createElementNS(SVGNS,'g');grp.setAttribute('transform','translate('+a.xy[0]+','+a.xy[1]+')');
-    var c=document.createElementNS(SVGNS,'circle');c.setAttribute('class','act-dot');c.setAttribute('r','11');c.setAttribute('fill','#b0a894');c.setAttribute('opacity','.35');c.id='actdot'+i;
-    var em=document.createElementNS(SVGNS,'text');em.setAttribute('class','act-emo');em.setAttribute('text-anchor','middle');em.setAttribute('y','-20');em.textContent=a.em;
+    var grp=document.createElementNS(SVGNS,'g');grp.setAttribute('transform','translate('+a.xy[0]+','+a.xy[1]+')');grp.id='actg'+i;grp.style.display='none';
+    var c=document.createElementNS(SVGNS,'circle');c.setAttribute('class','act-badge');c.setAttribute('r','9');c.id='actdot'+i;
     var num=document.createElementNS(SVGNS,'text');num.setAttribute('class','act-num');num.setAttribute('text-anchor','middle');num.id='actnum'+i;
-    grp.appendChild(c);grp.appendChild(em);grp.appendChild(num);g.appendChild(grp);
+    grp.appendChild(c);grp.appendChild(num);g.appendChild(grp);
   });
   document.getElementById('map').appendChild(g);
 }
 function renderActMarkers(byKey){
   ensureActMarkers();byKey=byKey||{};
   ACT.forEach(function(a,i){
-    var n=byKey[a.key]||0,c=document.getElementById('actdot'+i),num=document.getElementById('actnum'+i);
-    if(n>0){c.setAttribute('r',(13+Math.min(n,20)/20*13).toFixed(0));c.setAttribute('fill','#8f1d1d');c.setAttribute('opacity','.92');num.textContent=n;}
-    else{c.setAttribute('r','11');c.setAttribute('fill','#b0a894');c.setAttribute('opacity','.35');num.textContent='';}
+    var n=byKey[a.key]||0,grp=document.getElementById('actg'+i),c=document.getElementById('actdot'+i),num=document.getElementById('actnum'+i);
+    if(n>0){grp.style.display='';c.setAttribute('r',(14+Math.min(n,20)/20*9).toFixed(0));num.textContent=n;}
+    else grp.style.display='none';
   });
 }
 
@@ -644,7 +624,7 @@ function buildClassSelect(){
 function submitClass(cls){
   jsonp({action:'setclass',id:deviceId,cls:cls},function(res){
     if(res&&res.ok){myClass=cls;try{localStorage.setItem(CLS_KEY,cls);}catch(e){}toast('Đã chọn lớp '+cls);pollStats();}
-    else toast('Có lỗi, thử lại nhé.');
+    else toast('Lỗi: '+((res&&res.error)||'thử lại nhé'));
   },function(){toast('Mạng chập chờn — thử lại nhé.');});
 }
 function renderClassBoard(board){
@@ -713,8 +693,26 @@ document.getElementById('shareBtn').addEventListener('click',showCard);
 document.getElementById('cardClose').addEventListener('click',function(){document.getElementById('cardModal').classList.remove('on');});
 document.getElementById('cardModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('on');});
 
+/* ===== CALIBRATE (?cal=1) ===== */
+function initCalibrate(){
+  if(new URLSearchParams(location.search).get('cal')!=='1')return;
+  var svg=document.getElementById('map');
+  ACT.forEach(function(a){
+    var t=document.createElementNS(SVGNS,'text');
+    t.setAttribute('x',a.xy[0]);t.setAttribute('y',a.xy[1]);t.setAttribute('fill','#06f');t.setAttribute('font-size','18');t.setAttribute('font-weight','700');t.setAttribute('text-anchor','middle');t.textContent='◉'+a.short;
+    svg.appendChild(t);
+  });
+  svg.style.cursor='crosshair';
+  svg.addEventListener('click',function(e){
+    var pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;
+    var p=pt.matrixTransform(svg.getScreenCTM().inverse());
+    var xy='['+Math.round(p.x)+','+Math.round(p.y)+']';
+    toast('Toạ độ: '+xy);console.log('COORD',xy);
+  });
+}
+
 /* ===== INIT ===== */
-renderActGrid({});updatePassport();checkComplete();initDeepLink();buildClassSelect();
+renderActGrid({});updatePassport();checkComplete();initDeepLink();buildClassSelect();initCalibrate();
 if(myEmo)showTab('cloud');
 pollStats();setInterval(pollStats,15000);
 </script>
